@@ -6,15 +6,8 @@
  * AuthorURI: https://marketersdelight.com/
  * DropinURI: https://marketersdelight.com/wordpress-tracking-scripts/
  * Slug: scripts
- * Version: 1.0.1
- */
-
-/**
- * Scripts and Styles manager. Add Header/Footer tracking scripts
- * sitewide or to a single post/page/category and disable scripts
- * and styles on the same basis.
- *
- * @since 4.4.2
+ * Version: 1.1
+ * @since MD4.4.2
  */
 
 class md_scripts extends md_api {
@@ -34,21 +27,24 @@ class md_scripts extends md_api {
 	}
 
 	/**
-	 * Pesuedo constructor, adds admin tab to MD page.
+	 * Register various admin settings.
 	 *
 	 * @since 5.0
 	 */
 
 	public function register() {
-		$this->name = __( 'Scripts Manager', 'md' );
+		$this->name = __( 'Scripts', 'md' );
+		$fields = $this->fields();
 		return array(
 			'meta_box' => array(
 				'name' => $this->name,
-				'fields' => $this->fields()
+				'page_settings' => true,
+				'fields' => $fields
 			),
 			'term' => array(
 				'name' => $this->name,
-				'fields' => $this->fields()
+				'page_settings' => true,
+				'fields' => $fields
 			)
 		);
 	}
@@ -72,6 +68,45 @@ class md_scripts extends md_api {
 				'options' => $scripts
 			);
 		return $save;
+	}
+
+	/**
+	 * Add settings template and script to Page Settings sections.
+	 *
+	 * @since 5.6
+	 */
+
+	public function admin_fields() { ?>
+		<div class="md-widget md-toggle md-sep-small">
+			<h3 class="md-widget-title"><?php echo esc_html( $this->name ); ?></h3>
+			<div class="md-widget-item">
+				<?php $this->admin_template(); ?>
+			</div>
+		</div>
+	<?php }
+
+	/**
+	 * Meta box fields.
+	 *
+	 * @since 5.0
+	 */
+
+	public function meta_box() {
+		echo "<div class=\"md-$this->_clean_id md-tab-content\">";
+		$this->admin_template();
+		echo '</div>';
+	}
+
+	/**
+	 * Terms fields.
+	 *
+	 * @since 5.0
+	 */
+
+	public function term() {
+		echo "<div class=\"md-$this->_clean_id md-tab-content\">";
+		$this->admin_template();
+		echo '</div>';
 	}
 
 	/**
@@ -117,31 +152,6 @@ class md_scripts extends md_api {
 				) ); ?>
 			</div>
 		<?php endif; ?>
-	<?php }
-
-	/**
-	 * Meta box fields.
-	 *
-	 * @since 5.0
-	 */
-
-	public function meta_box() {
-		$this->admin_template();
-	}
-
-	/**
-	 * Terms fields.
-	 *
-	 * @since 5.0
-	 */
-
-	public function term() { ?>
-		<div class="md-widget md-toggle md-sep-small">
-			<h3 class="md-widget-title"><?php echo $this->name; ?></h3>
-			<div class="md-widget-item">
-				<?php $this->admin_template(); ?>
-			</div>
-		</div>
 	<?php }
 
 	/**
