@@ -43,8 +43,8 @@ class md_scripts extends md_api {
 			),
 			'term' => array(
 				'name' => $this->name,
-				'page_settings' => true,
-				'fields' => $fields
+				'fields' => $fields,
+				'callback' => array( $this, 'admin_fields' )
 			)
 		);
 	}
@@ -92,18 +92,6 @@ class md_scripts extends md_api {
 	 */
 
 	public function meta_box() {
-		echo "<div class=\"md-$this->_clean_id md-tab-content\">";
-		$this->admin_template();
-		echo '</div>';
-	}
-
-	/**
-	 * Terms fields.
-	 *
-	 * @since 5.0
-	 */
-
-	public function term() {
 		echo "<div class=\"md-$this->_clean_id md-tab-content\">";
 		$this->admin_template();
 		echo '</div>';
