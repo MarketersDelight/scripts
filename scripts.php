@@ -1,10 +1,10 @@
 <?php
 /**
- * Drop-in Name: Scripts manager
+ * Drop-in Name: Scripts Manager
  * Description: Add custom scripts to the body and footer of your pages. Offers sitewide scripts and the ability to adds scripts to specific posts and pages from the post editor.
  * Author: Alex, Kolakube
  * AuthorURI: https://marketersdelight.com/
- * DropinURI: https://marketersdelight.com/wordpress-tracking-scripts/
+ * DropinURI: https://marketersdelight.com/dropins/
  * Slug: scripts
  * Version: 1.1
  * @since MD4.4.2
@@ -19,11 +19,10 @@ class md_scripts extends md_api {
 	 */
 
 	public function actions() {
-		$this->settings = md_setting( array( 'settings' ) );
-		$this->google_analytics = md_setting( array( 'integrations', 'api_keys', 'google_analytics' ) );
 		add_action( 'wp_head', array( $this, 'wp_head' ) );
 		add_action( 'wp_footer', array( $this, 'wp_footer' ), 100 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'dequeue_scripts' ) );
+		add_filter( 'body_class', array( $this, 'body_class' ) );
 	}
 
 	/**
@@ -35,6 +34,7 @@ class md_scripts extends md_api {
 	public function register() {
 		$this->name = __( 'Scripts', 'md' );
 		$fields = $this->fields();
+
 		return array(
 			'meta_box' => array(
 				'name' => $this->name,
@@ -62,12 +62,40 @@ class md_scripts extends md_api {
 			'header_scripts' => array( 'type' => 'code' ),
 			'footer_scripts' => array( 'type' => 'code' )
 		);
+
 		if ( ! empty( $scripts ) )
 			$save['scripts_manager'] = array(
 				'type' => 'checkbox',
 				'options' => $scripts
 			);
+
 		return $save;
+	}
+
+	/**
+ 	 * Filter body classes.
+ 	 *
+ 	 * @since 4.1
+	 * @moved 5.6
+ 	*/
+
+	public function body_class( $classes ) {
+		// Add custom body classes
+		$custom = md_module( array( 'scripts', 'body_class' ) );
+
+		if ( $custom ) {
+			$custom = explode( ' ' , $custom );
+			foreach ( $custom as $class )
+				$classes[] = esc_attr( $class );
+		}
+
+		// Remove excess WP classes
+		$classes = array_diff( $classes, array(
+			'single-format-standard',
+			'single-format-' . get_post_format()
+		) );
+
+		return $classes;
 	}
 
 	/**
@@ -107,6 +135,7 @@ class md_scripts extends md_api {
 		$scripts = $this->dequeue_data( 'labels' );
 		$screen = get_current_screen();
 	?>
+
 		<?php if ( $screen->base !== 'toplevel_page_md_settings' ) : ?>
 			<div class="md-sep-small">
 				<?php $this->fields->field( 'body_class', array(
@@ -140,6 +169,7 @@ class md_scripts extends md_api {
 				) ); ?>
 			</div>
 		<?php endif; ?>
+
 	<?php }
 
 	/**
@@ -150,14 +180,17 @@ class md_scripts extends md_api {
 
 	public function dequeue_scripts() {
 		$scripts = $this->dequeue_data();
+
 		if ( ! empty( $scripts ) ) {
 			if ( is_singular() ) {
 				$meta = md_post_meta( array( 'scripts', 'scripts_manager' ) );
+
 				if ( ! empty( $meta ) )
 					$this->dequeue_action( $meta );
 			}
 			if ( is_category() || is_tax() ) {
 				$tax = md_term_meta( array( 'scripts', 'scripts_manager' ) );
+
 				if ( ! empty( $tax ) )
 					$this->dequeue_action( $tax );
 			}
@@ -176,6 +209,7 @@ class md_scripts extends md_api {
 				if ( isset( $assets['styles'] ) )
 					foreach ( $assets['styles'] as $style )
 						wp_dequeue_style( $style );
+
 				if ( isset( $assets['scripts'] ) )
 					foreach ( $assets['scripts'] as $script )
 						wp_dequeue_script( $script );
@@ -190,19 +224,25 @@ class md_scripts extends md_api {
 
 	public function dequeue_data( $sort = null ) {
 		$scripts = apply_filters( 'md_filter_dequeue_scripts', array() );
+
 		if ( ! empty( $scripts ) )
 			if ( $sort == 'ids' ) {
 				$ids = array();
+
 				foreach ( $scripts as $plugin => $assets )
 					$ids[] = $plugin;
+
 				return $ids;
 			}
 			elseif ( $sort == 'labels' ) {
 				$labels = array();
+
 				foreach ( $scripts as $plugin => $assets )
 					$labels[$plugin] = $assets['label'];
+
 				return $labels;
 			}
+
 		return $scripts;
 	}
 
@@ -213,18 +253,20 @@ class md_scripts extends md_api {
 	 */
 
 	public function wp_head() {
-		if ( ! empty( $this->settings['header_scripts'] ) )
-			echo html_entity_decode( $this->settings['header_scripts'] ) . "\n";
-		if ( is_category() || is_tax() ) {
-			$tax_scripts = md_term_meta( array( 'scripts', 'header_scripts' ) );
-			if ( ! empty( $tax_scripts ) )
-				echo html_entity_decode( $tax_scripts ) . "\n";
-		}
-		if ( is_singular() ) {
-			$meta_scripts = md_post_meta( array( 'scripts', 'header_scripts' ) );
-			if ( ! empty( $meta_scripts ) )
-				echo html_entity_decode( $meta_scripts ) . "\n";
-		}
+		$scripts = '';
+		$key = array( 'scripts', 'header_scripts' );
+
+		$scripts .= md_setting( array( 'settings', 'header_scripts' ) );
+
+		if ( is_singular() )
+			$scripts .= md_post_meta( $key );
+		elseif ( is_post_type_archive() || is_home() )
+			$scripts .= md_post_type_field( $key );
+		elseif ( is_category() || is_tax() )
+			$scripts .= md_term_meta( $key );
+
+		if ( $scripts )
+			echo html_entity_decode( $scripts );
 	}
 
 	/**
@@ -234,20 +276,24 @@ class md_scripts extends md_api {
 	 */
 
 	public function wp_footer() {
-		if ( ! empty( $this->google_analytics['key'] ) )
+		$scripts = '';
+		$key = array( 'scripts', 'footer_scripts' );
+		$google = md_setting( array( 'integrations', 'api_keys', 'google_analytics', 'key' ) );
+
+		if ( $google )
 			$this->google_analytics();
-		if ( ! empty( $this->settings['footer_scripts'] ) )
-			echo html_entity_decode( $this->settings['footer_scripts'] ) . "\n";
-		if ( is_category() || is_tax() ) {
-			$tax_scripts = md_term_meta( array( 'scripts', 'footer_scripts' ) );
-			if ( ! empty( $tax_scripts ) )
-				echo html_entity_decode( $tax_scripts ) . "\n";
-		}
-		if ( is_singular() ) {
-			$meta_scripts = md_post_meta( array( 'scripts', 'footer_scripts' ) );
-			if ( ! empty( $meta_scripts ) )
-				echo html_entity_decode( $meta_scripts ) . "\n";
-		}
+
+		$scripts .= md_setting( array( 'settings', 'footer_scripts' ) );
+
+		if ( is_singular() )
+			$scripts .= md_post_meta( $key );
+		elseif ( is_post_type_archive() || is_home() )
+			$scripts .= md_post_type_field( $key );
+		elseif ( is_category() || is_tax() )
+			$scripts .= md_term_meta( $key );
+
+		if ( $scripts )
+			echo html_entity_decode( $scripts );
 	}
 
 	/**
