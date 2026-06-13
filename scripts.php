@@ -36,7 +36,7 @@ class md_scripts extends md_api {
 		return array(
 			'admin_page' => array(
 				'name' => $this->name,
-				'parent_group' => 'page_settings',
+				'group' => 'page_settings',
 				'fields' => $this->fields()
 			),
 			'meta_box' => array(
@@ -46,7 +46,7 @@ class md_scripts extends md_api {
 			),
 			'term' => array(
 				'name' => $this->name,
-				'parent_group' => 'page_settings',
+				'group' => 'page_settings',
 				'fields' => $this->fields()
 			)
 		);
