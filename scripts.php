@@ -288,7 +288,7 @@ class md_scripts extends md_api {
 		$google = md_setting( array( 'integrations', 'api_keys', 'google_analytics', 'key' ) );
 
 		if ( $google )
-			$this->google_analytics();
+			$this->google_analytics( $google );
 
 		$scripts .= md_setting( array( 'scripts', 'footer_scripts' ) );
 
@@ -309,14 +309,14 @@ class md_scripts extends md_api {
 	 * @since 4.9
 	 */
 
-	public function google_analytics() { ?>
+	public function google_analytics( $key ) { ?>
 		<!-- Global Site Tag (gtag.js) - Google Analytics -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr( $this->google_analytics['key'] ); ?>"></script>
+		<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr( $key ); ?>"></script>
 		<script>
 			window.dataLayer = window.dataLayer || [];
 			function gtag(){dataLayer.push(arguments);}
 			gtag('js', new Date());
-			gtag('config', '<?php echo esc_attr( $this->google_analytics['key'] ); ?>');
+			gtag('config', '<?php echo esc_attr( $key ); ?>');
 		</script>
 	<?php }
 
