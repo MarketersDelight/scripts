@@ -3,10 +3,13 @@
  * Drop-in Name: Scripts Manager
  * Description: Add custom scripts to the body and footer of your pages. Offers sitewide scripts and the ability to adds scripts to specific posts and pages from the post editor.
  * Author: Alex, Kolakube
- * AuthorURI: https://marketersdelight.com/
- * DropinURI: https://marketersdelight.com/dropins/
- * Slug: scripts
+ * Author URI: https://marketersdelight.com/
+ * Drop-in URI: https://marketersdelight.com/dropins/
+ * Drop-in Slug: scripts
+ * Text Domain: md-scripts
  * Version: 1.1
+ * Requires at least: 6.6
+ * Requires PHP: 7.4
  * @since MD4.4.2
  */
 
@@ -32,7 +35,7 @@ class md_scripts extends md_api {
 	 */
 
 	public function register() {
-		$this->name = __( 'Scripts', 'md' );
+		$this->name = __( 'Scripts', 'md-scripts' );
 		return array(
 			'admin_page' => array(
 				'name' => $this->name,
@@ -147,31 +150,31 @@ class md_scripts extends md_api {
 		<div class="md-sep-small">
 			<?php $this->fields->field( 'body_class', array(
 				'type' => 'text',
-				'label' => __( 'Body classes', 'md' ),
-				'description' => __( 'Add custom CSS classes to the <code>body</code> tag of this page.', 'md' )
+				'label' => __( 'Body classes', 'md-scripts' ),
+				'description' => __( 'Add custom CSS classes to the <code>body</code> tag of this page.', 'md-scripts' )
 			) ); ?>
 		</div>
 		<?php endif; ?>
 		<div class="md-sep-small">
 			<?php $this->fields->field( 'header_scripts', array(
 				'type' => 'code',
-				'label' => __( 'Header Scripts', 'md' ),
-				'description' => __( 'Print scripts to the <code>&lt;head></code> section (before opening <code>&lt;body></code> tag).', 'md' )
+				'label' => __( 'Header Scripts', 'md-scripts' ),
+				'description' => __( 'Print scripts to the <code>&lt;head></code> section (before opening <code>&lt;body></code> tag).', 'md-scripts' )
 			) ); ?>
 		</div>
 		<div class="md-sep-small">
 			<?php $this->fields->field( 'footer_scripts', array(
 				'type' => 'code',
-				'label' => __( 'Footer Scripts', 'md' ),
-				'description' => __( 'Print scripts after the <code>&lt;footer></code> section (before closing <code>&lt;/body></code> tag).', 'md' )
+				'label' => __( 'Footer Scripts', 'md-scripts' ),
+				'description' => __( 'Print scripts after the <code>&lt;footer></code> section (before closing <code>&lt;/body></code> tag).', 'md-scripts' )
 			) ); ?>
 		</div>
 		<?php if ( $screen->base !== 'toplevel_page_md_settings' && ! empty( $scripts ) ) : ?>
 			<div class="md-sep-small">
 				<?php $this->fields->field( 'scripts_manager', array(
 					'type' => 'checkbox',
-					'label' => __( 'Scripts Optimization', 'md' ),
-					'description' => __( '<b>Note:</b> Only remove the scripts and styles you know this page does not use, otherwise you may break some plugin functionality.', 'md' ),
+					'label' => __( 'Scripts Optimization', 'md-scripts' ),
+					'description' => __( '<b>Note:</b> Only remove the scripts and styles you know this page does not use, otherwise you may break some plugin functionality.', 'md-scripts' ),
 					'options' => $scripts
 				) ); ?>
 			</div>
