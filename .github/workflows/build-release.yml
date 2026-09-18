@@ -1,0 +1,58 @@
+name: Build Release
+
+# Tag format: v1.2.0
+# Zip is <slug>-<version>.zip; the folder inside is just <slug>/.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+env:
+  # Defaults to the repo name. Hard-code it if the repo name differs from the drop-in folder name.
+  SLUG: ${{ github.event.repository.name }}
+
+jobs:
+  build:
+    name: Build and attach drop-in zip
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Build clean drop-in directory
+        run: |
+          mkdir -p "build/$SLUG"
+          rsync -av \
+            --exclude-from=.distignore \
+            --exclude='/build' \
+            ./ "build/$SLUG/"
+
+      - name: Remove stray system files
+        run: find build -name '.DS_Store' -delete
+
+      - name: Create zip
+        run: |
+          cd build
+          zip -qr "$SLUG-${{ steps.version.outputs.version }}.zip" "$SLUG"
+
+      - name: Verify no dev files shipped
+        run: |
+          if unzip -l "build/$SLUG-${{ steps.version.outputs.version }}.zip" \
+            | grep -E '/(\.git[a-z]*|\.distignore|\.DS_Store|tests|node_modules|phpunit[^/]*\.xml[^/]*)(/|$)'; then
+            echo "Dev files found in zip. Update .distignore." >&2
+            exit 1
+          fi
+
+      - name: Attach zip to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/${{ env.SLUG }}-${{ steps.version.outputs.version }}.zip
+          generate_release_notes: true

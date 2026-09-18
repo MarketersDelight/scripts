@@ -1,0 +1,48 @@
+# Same file in every drop-in repo. Patterns are anchored to the repo root.
+
+# Development directories
+/tests/
+/node_modules/
+/vendor/
+/build/
+/.git/
+/.github/
+
+# Config and dependency files
+.gitignore
+.gitattributes
+.gitmodules
+.distignore
+.editorconfig
+composer.json
+composer.lock
+package.json
+package-lock.json
+phpunit*.xml*
+.phpunit.result.cache
+.phpunit.cache/
+phpcs*.xml*
+*.dist
+.eslintrc*
+.eslintignore
+.stylelintrc*
+.prettierrc*
+
+# Docs and meta
+README.md
+CONTRIBUTING.md
+CHANGELOG.md
+
+# Environment and local
+.env
+.env.example
+*.log
+*.map
+.DS_Store
+**/.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Not excluded on purpose: /src/. Drop-ins may keep real PHP classes there.
+# Add "/src/" here if a drop-in compiles assets from it.
