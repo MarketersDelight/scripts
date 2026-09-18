@@ -1,12 +1,11 @@
 {
-	"name" : "Scripts manager",
+	"name" : "Scripts Manager",
 	"author" : "Alex, Kolakube",
 	"version" : "1.1",
-	"description" : "Add custom scripts to the body and footer of your pages. Offers sitewide scripts and the ability to adds scripts to specific posts and pages from the post editor.",
-	"dropin_url" : "https://marketersdelight.com/wordpress-tracking-scripts/",
+	"description" : "Add custom scripts to the head and footer of your pages. Offers sitewide scripts and the ability to add scripts to specific posts and pages from the post editor.",
+	"dropin_url" : "https://marketersdelight.com/dropins/scripts/",
 	"settings_url" : "admin.php?page=md_settings",
 	"author_url" : "https://marketersdelight.com/",
 	"icon" : "dashicons-media-code",
-	"colors" : "#444",
-	"active" : "true"
+	"colors" : "#444"
 }

@@ -7,17 +7,19 @@ A [Marketers Delight](https://marketersdelight.com/) drop-in for adding custom c
 - Header scripts, printed in `<head>`
 - Footer scripts, printed before `</body>`
 - Sitewide scripts, plus scripts for single posts and pages, post type archives and the blog page, and category and taxonomy archives. Page-specific scripts are added after the sitewide ones.
-- Custom body classes on individual posts, pages and terms
+- Custom body classes, sitewide or on individual posts, pages and terms
 - Scripts Optimization: turn off selected plugin scripts and styles on single posts and on category and taxonomy archives. The list of plugins comes from the `md_filter_dequeue_scripts` filter, and the option only shows when something is registered.
 - Prints the Google Analytics (gtag.js) tag when a Google Analytics ID is set in MD's integration settings
-- Removes WordPress's `single-format-standard` and `single-format-{format}` body classes
 
 ## Settings
 
-**Sitewide** (MD settings, Page Settings group → Scripts):
+**Sitewide** (MD settings dashboard → Scripts):
 
+- **Body classes**
 - **Header Scripts**
 - **Footer Scripts**
+
+**Post type archives**: the same three fields in each post type's settings, for its archive page (and the blog page for posts).
 
 **Per page**: in the Page Settings box on posts and pages, and on category and taxonomy term screens:
 

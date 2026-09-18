@@ -1,10 +1,10 @@
 <?php
 /**
  * Drop-in Name: Scripts Manager
- * Description: Add custom scripts to the body and footer of your pages. Offers sitewide scripts and the ability to adds scripts to specific posts and pages from the post editor.
+ * Description: Add custom scripts to the head and footer of your pages. Offers sitewide scripts and the ability to add scripts to specific posts and pages from the post editor.
  * Author: Alex, Kolakube
  * Author URI: https://marketersdelight.com/
- * Drop-in URI: https://marketersdelight.com/dropins/
+ * Drop-in URI: https://marketersdelight.com/dropins/scripts/
  * Drop-in Slug: scripts
  * Text Domain: md-scripts
  * Version: 1.1
@@ -26,6 +26,9 @@ class md_scripts extends md_api {
 		add_action( 'wp_footer', array( $this, 'wp_footer' ), 100 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'dequeue_scripts' ) );
 		add_filter( 'body_class', array( $this, 'body_class' ) );
+
+		if ( is_admin() )
+			add_action( 'md_hook_admin_after_tools', array( $this, 'admin_fields' ) );
 	}
 
 	/**
@@ -99,12 +102,6 @@ class md_scripts extends md_api {
 				$classes[] = esc_attr( $class );
 		}
 
-		// Remove excess WP classes
-		$classes = array_diff( $classes, array(
-			'single-format-standard',
-			'single-format-' . get_post_format()
-		) );
-
 		return $classes;
 	}
 
@@ -146,15 +143,13 @@ class md_scripts extends md_api {
 		$screen = get_current_screen();
 	?>
 
-		<?php if ( $screen->base !== 'toplevel_page_md_settings' ) : ?>
 		<div class="md-sep-small">
 			<?php $this->fields->field( 'body_class', array(
 				'type' => 'text',
 				'label' => __( 'Body classes', 'md-scripts' ),
-				'description' => __( 'Add custom CSS classes to the <code>body</code> tag of this page.', 'md-scripts' )
+				'description' => __( 'Add custom CSS classes to the <code>body</code> tag.', 'md-scripts' )
 			) ); ?>
 		</div>
-		<?php endif; ?>
 		<div class="md-sep-small">
 			<?php $this->fields->field( 'header_scripts', array(
 				'type' => 'code',
