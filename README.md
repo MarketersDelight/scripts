@@ -47,7 +47,7 @@ add_filter( 'md_filter_dequeue_scripts', function( $plugins ) {
 ## Requirements
 
 - Marketers Delight 6.0 or later
-- WordPress 6.6 or later
+- WordPress 6.2 or later
 - PHP 7.4 or later
 
 ## Install
