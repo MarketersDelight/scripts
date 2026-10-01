@@ -43,6 +43,7 @@ class md_scripts extends md_api {
 			'admin_page' => array(
 				'name' => $this->name,
 				'group' => 'page_settings',
+				'position' => 30,
 				'fields' => $this->fields()
 			),
 			'meta_box' => array(
