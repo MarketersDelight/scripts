@@ -7,7 +7,7 @@
  * Drop-in URI: https://marketersdelight.com/dropins/scripts/
  * Drop-in Slug: scripts
  * Text Domain: md-scripts
- * Version: 1.1
+ * Version: 2.0
  * Requires at least: 6.2
  * Requires PHP: 7.4
  * @since MD4.4.2
