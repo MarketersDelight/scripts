@@ -68,14 +68,24 @@ class md_scripts extends md_api {
 	public function fields() {
 		$scripts = $this->dequeue_data( 'ids' );
 		$save = array(
-			'body_class' => array( 'type' => 'text' ),
-			'header_scripts' => array( 'type' => 'code' ),
-			'footer_scripts' => array( 'type' => 'code' )
+			'body_class' => array(
+				'type' => 'text',
+				'label' => __( 'Body classes', 'md-scripts' )
+			),
+			'header_scripts' => array(
+				'type' => 'code',
+				'label' => __( 'Header Scripts', 'md-scripts' )
+			),
+			'footer_scripts' => array(
+				'type' => 'code',
+				'label' => __( 'Footer Scripts', 'md-scripts' )
+			)
 		);
 
 		if ( ! empty( $scripts ) )
 			$save['scripts_manager'] = array(
 				'type' => 'checkbox',
+				'label' => __( 'Scripts Optimization', 'md-scripts' ),
 				'options' => $scripts
 			);
 
@@ -114,7 +124,7 @@ class md_scripts extends md_api {
 
 	public function admin_fields() { ?>
 		<div class="md-widget md-toggle md-sep-small">
-			<h3 class="md-widget-title"><?php echo esc_html( $this->name ); ?></h3>
+			<h3 class="md-widget-title"><?php echo function_exists( 'md_get_dropin_icon' ) ? md_get_dropin_icon( 'scripts', 'small' ) : ''; ?><?php echo esc_html( $this->name ); ?></h3>
 			<div class="md-widget-item">
 				<?php $this->admin_template(); ?>
 			</div>
@@ -146,30 +156,22 @@ class md_scripts extends md_api {
 
 		<div class="md-sep-small">
 			<?php $this->fields->field( 'body_class', array(
-				'type' => 'text',
-				'label' => __( 'Body classes', 'md-scripts' ),
 				'description' => __( 'Add custom CSS classes to the <code>body</code> tag.', 'md-scripts' )
 			) ); ?>
 		</div>
 		<div class="md-sep-small">
 			<?php $this->fields->field( 'header_scripts', array(
-				'type' => 'code',
-				'label' => __( 'Header Scripts', 'md-scripts' ),
 				'description' => __( 'Print scripts to the <code>&lt;head></code> section (before opening <code>&lt;body></code> tag).', 'md-scripts' )
 			) ); ?>
 		</div>
 		<div class="md-sep-small">
 			<?php $this->fields->field( 'footer_scripts', array(
-				'type' => 'code',
-				'label' => __( 'Footer Scripts', 'md-scripts' ),
 				'description' => __( 'Print scripts after the <code>&lt;footer></code> section (before closing <code>&lt;/body></code> tag).', 'md-scripts' )
 			) ); ?>
 		</div>
 		<?php if ( $screen->base !== 'toplevel_page_md_settings' && ! empty( $scripts ) ) : ?>
 			<div class="md-sep-small">
 				<?php $this->fields->field( 'scripts_manager', array(
-					'type' => 'checkbox',
-					'label' => __( 'Scripts Optimization', 'md-scripts' ),
 					'description' => __( '<b>Note:</b> Only remove the scripts and styles you know this page does not use, otherwise you may break some plugin functionality.', 'md-scripts' ),
 					'options' => $scripts
 				) ); ?>
