@@ -10,6 +10,10 @@
  * Version: 2.0
  * Requires at least: 6.2
  * Requires PHP: 7.4
+ * Requires MD: 6.2
+ * Icon: dashicons-media-code
+ * Colors: #444
+ * Settings URL: admin.php?page=md_settings
  * @since MD4.4.2
  */
 
@@ -123,7 +127,7 @@ class md_scripts extends md_api {
 	 */
 
 	public function admin_fields() { ?>
-		<div class="md-widget md-toggle md-sep-small">
+		<div class="md-widget md-toggle mb-single">
 			<h3 class="md-widget-title"><?php echo function_exists( 'md_get_dropin_icon' ) ? md_get_dropin_icon( 'scripts', 'small' ) : ''; ?><?php echo esc_html( $this->name ); ?></h3>
 			<div class="md-widget-item">
 				<?php $this->admin_template(); ?>
@@ -154,23 +158,23 @@ class md_scripts extends md_api {
 		$screen = get_current_screen();
 	?>
 
-		<div class="md-sep-small">
+		<div class="mb-single">
 			<?php $this->fields->field( 'body_class', array(
 				'description' => __( 'Add custom CSS classes to the <code>body</code> tag.', 'md-scripts' )
 			) ); ?>
 		</div>
-		<div class="md-sep-small">
+		<div class="mb-single">
 			<?php $this->fields->field( 'header_scripts', array(
 				'description' => __( 'Print scripts to the <code>&lt;head></code> section (before opening <code>&lt;body></code> tag).', 'md-scripts' )
 			) ); ?>
 		</div>
-		<div class="md-sep-small">
+		<div class="mb-single">
 			<?php $this->fields->field( 'footer_scripts', array(
 				'description' => __( 'Print scripts after the <code>&lt;footer></code> section (before closing <code>&lt;/body></code> tag).', 'md-scripts' )
 			) ); ?>
 		</div>
 		<?php if ( $screen->base !== 'toplevel_page_md_settings' && ! empty( $scripts ) ) : ?>
-			<div class="md-sep-small">
+			<div class="mb-single">
 				<?php $this->fields->field( 'scripts_manager', array(
 					'description' => __( '<b>Note:</b> Only remove the scripts and styles you know this page does not use, otherwise you may break some plugin functionality.', 'md-scripts' ),
 					'options' => $scripts
