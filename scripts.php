@@ -129,7 +129,7 @@ class md_scripts extends md_api {
 
 	public function admin_fields() { ?>
 		<div class="md-widget md-toggle mb-single">
-			<h3 class="md-widget-title"><?php echo function_exists( 'md_get_dropin_icon' ) ? md_get_dropin_icon( 'scripts', 'small' ) : ''; ?><?php echo esc_html( $this->name ); ?></h3>
+			<h3 class="md-widget-title"><?php echo function_exists( 'md_get_dropin_icon' ) ? md_get_dropin_icon( 'scripts', 'small' ) : ''; ?><span><?php echo esc_html( $this->name ); ?><span class="md-widget-description"><?php esc_html_e( 'Code for your site\'s head and footer', 'md-scripts' ); ?></span></span></h3>
 			<div class="md-widget-item">
 				<?php $this->admin_template(); ?>
 			</div>
