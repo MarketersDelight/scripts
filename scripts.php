@@ -273,10 +273,10 @@ class md_scripts extends md_api {
 
 		if ( is_singular() )
 			$scripts .= md_post_meta( $key );
-		elseif ( is_post_type_archive() || is_home() )
-			$scripts .= md_post_type_field( $key );
 		elseif ( is_category() || is_tax() )
 			$scripts .= md_term_meta( $key );
+		elseif ( is_post_type_archive() || is_home() )
+			$scripts .= md_post_type_field( $key );
 
 		if ( $scripts )
 			echo html_entity_decode( $scripts );
@@ -300,10 +300,10 @@ class md_scripts extends md_api {
 
 		if ( is_singular() )
 			$scripts .= md_post_meta( $key );
-		elseif ( is_post_type_archive() || is_home() )
-			$scripts .= md_post_type_field( $key );
 		elseif ( is_category() || is_tax() )
 			$scripts .= md_term_meta( $key );
+		elseif ( is_post_type_archive() || is_home() )
+			$scripts .= md_post_type_field( $key );
 
 		if ( $scripts )
 			echo html_entity_decode( $scripts );
